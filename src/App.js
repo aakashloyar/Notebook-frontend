@@ -8,7 +8,7 @@ import Layout from './components/Layout'
 import NoteState from './context/notes/notestate';
 function App() {
   return (
-    <div>
+    <>
       <NoteState>
         <BrowserRouter>
           <Routes>
@@ -19,7 +19,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </NoteState>
-    </div>
+    </>
   );
 }
 
