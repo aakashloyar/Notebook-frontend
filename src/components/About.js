@@ -8,7 +8,7 @@ export default function About() {
   },[])
   return (
     <div>
-      This is my {a.state.name}
+      This is my About
     </div>
   )
 }
