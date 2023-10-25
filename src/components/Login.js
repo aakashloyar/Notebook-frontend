@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 //import { useHistory } from 'react-router';
 import { useNavigate } from "react-router-dom";
-export default function Login() {
+export default function Login(props) {
     const [user, setuser] = useState({email: "", password: ""}) 
     const navigate = useNavigate();
     //const history = useHistory();
@@ -20,10 +20,13 @@ export default function Login() {
         if(json.success) {
             localStorage.setItem('token', json.authtoken);
             navigate("/")
+            console.log("bol mere log")
+            props.showAlert("Successfully Loggedin","success"); 
         }
         else {
-            alert("try again");
-            console.error("try again")
+          props.showAlert("Invalid user","danger"); 
+          navigate("/login")
+          console.error("try again")
         }
     }
 

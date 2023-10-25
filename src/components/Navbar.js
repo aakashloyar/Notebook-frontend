@@ -1,14 +1,19 @@
 import React, { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-
-export default function Navbar() {
+import { useLocation,useNavigate } from "react-router-dom";
+import Alert from  "./Alert"
+export default function Navbar(props) {
+  const navigate=useNavigate();
+  const onClick=()=>{
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
   let location = useLocation();
   useEffect(() => {
     console.log(location.pathname);
   }, [location]);
   return (
-    <div>
+    <div className="my-10">
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
@@ -38,15 +43,18 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-            <Link type="button" to="/login" className="btn btn-primary mx-1">Login</Link>
+            {!localStorage.getItem('token')?<form className="d-flex">
+
+            <Link type="button" to="/login"  className="btn btn-primary mx-1 ">Login</Link>
             <Link type="button" to="/signup" className="btn btn-primary mx-1">Signup</Link>
 
-            </form>
+            </form>:<button className="btn btn-primary" onClick={onClick}>Logout</button>}
           </div>
         </div>
       </nav>
+      <Alert alert={props.alert}/>
       <Outlet />
+      
     </div>
   );
 }

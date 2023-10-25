@@ -1,6 +1,6 @@
 import React,{useState}  from 'react'
 import { useNavigate } from "react-router-dom";
-export default function Signup() {
+export default function Signup(props) {
   const [user, setuser] = useState({email: "", password: "",name:"",cpassword:""}) 
     const navigate = useNavigate();
     //const history = useHistory();
@@ -18,15 +18,17 @@ export default function Signup() {
             body: JSON.stringify({name:user.name,email: user.email, password: user.password})
         });
         const json = await response.json()
-         //console.log("This is my json"+json);
+         console.log("This is my json"+json);
          console.log("finally"+json.success+json.jwtData);
         if(json.success) {
-            localStorage.setItem('token', json.authtoken);
+            console.log(json.jwtData);
+            localStorage.setItem('token', json.jwtData);
             navigate("/")
-            
+            props.showAlert("Successfully created account","success"); 
         }
         else {
-            alert("try again");
+            props.showAlert("try again","danger");
+            navigate('/login') 
             console.error("try again")
         }
     }

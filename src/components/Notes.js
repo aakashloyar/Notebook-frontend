@@ -2,11 +2,19 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
-export default function Notes() {
+import { useNavigate } from "react-router-dom";
+export default function Notes(props) {
   const context = useContext(noteContext);
   const { notes, getNotes ,editNote} = context;
+  const navigate = useNavigate();
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('token')) {
+      getNotes();
+    }
+    else {
+      navigate("/login")
+    }
+    
     // eslint-disable-next-line
   }, []);
   const ref = useRef(null);
@@ -14,14 +22,16 @@ export default function Notes() {
   const [note, setNote] = useState({ etitle: "", edescription: "", etag: "" ,eid:""});
 
   const updateNote = (currentNote) => {
+    
     console.log("In updateNote note._id="+currentNote._id);
     ref.current.click();
-    setNote({
+     setNote({
       etitle: currentNote.title,
       edescription: currentNote.description,
       etag: currentNote.tag,
       eid:currentNote._id
     });
+    
 
   };
 
@@ -31,6 +41,7 @@ export default function Notes() {
     //  console.log("In handelClick note._id="+note.eid);
     editNote(note.eid, note.etitle, note.edescription, note.etag)
     refClose.current.click();
+    props.showAlert("Successfully Updated","success");
   };
 
   const onChange = (e) => {
@@ -60,7 +71,7 @@ export default function Notes() {
 
   return (
     <>
-      <AddNote />
+      <AddNote showAlert={props.showAlert} />
       <button
         ref={ref}
         type="button"
@@ -158,7 +169,7 @@ export default function Notes() {
       <div className="row my-3 ">
         <h2>Your Notes</h2>
         {notes.map((note) => {
-          return <Noteitem key={note._id} note={note} updateNote={updateNote}  />;
+          return <Noteitem key={note._id} note={note} updateNote={updateNote} showAlert={props.showAlert}  />;
           //return <  Noteitem note={note}/>;
         })}
       </div>
